@@ -201,7 +201,10 @@ def make_movie(args, density_bounds, temperature_bounds, bins):
 
     animation = get_animator(args, density_bounds, temperature_bounds, bins)
 
-    animation.save("rhoTPlot_physical_EAGLE12_adiabatic.mp4")
+    if args["output"]:
+        animation.save(args["output"])
+    else:
+        animation.save("rhoTPlot_physical.mp4")
 
     return
 
@@ -244,6 +247,15 @@ if __name__ == "__main__":
                 not including the final underscore. Required.""",
         type=str,
         required=True,
+    )
+
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="""Location of the output file (optional)""",
+        type=str,
+        default="",
+        required=False,
     )
 
     args = vars(parser.parse_args())
