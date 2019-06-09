@@ -12,7 +12,7 @@ from matplotlib.colors import LogNorm
 from matplotlib.animation import FuncAnimation
 
 # Constants; these could be put in the parameter file but are rarely changed.
-density_bounds = [1e-9, 1e1]  # in nh/cm^3
+density_bounds = [1e-7, 1e3]  # in nh/cm^3
 temperature_bounds = [10**(3), 10**(8)]  # in K
 bins = 128
 
