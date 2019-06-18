@@ -15,6 +15,7 @@ from matplotlib.animation import FuncAnimation
 density_bounds = [1e-7, 1e3]  # in nh/cm^3
 temperature_bounds = [10**(3), 10**(8)]  # in K
 bins = 128
+VMIN, VMAX = [1e0, 7.5e5]
 
 # Plotting controls
 cmap = "viridis"
@@ -110,7 +111,7 @@ def make_single_image(filename, n_files, density_bounds, temperature_bounds, bin
         filename, n_files, density_bounds, temperature_bounds, bins
     )
 
-    mappable = ax.pcolormesh(d, T, hist, cmap=cmap, norm=LogNorm())
+    mappable = ax.pcolormesh(d, T, hist, cmap=cmap, norm=LogNorm(vmin=VMIN, vmax=VMAX))
     fig.colorbar(mappable, label="Number of particles", pad=0)
 
     fig.tight_layout()
