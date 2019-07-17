@@ -1,0 +1,67 @@
+# Example parameter file.
+
+# Where the snapshots live
+snapshot_directory: /cosma5/data/Eagle/ScienceRuns/Planck1/L0100N1504/PE/REFERENCE/data
+
+# The snapshots that you wish to have in the video
+snapshots: [
+       "snapshot_000_z020p000",
+       "snapshot_001_z015p132",
+       "snapshot_002_z009p993",
+       "snapshot_003_z008p988",
+       "snapshot_004_z008p075",
+       "snapshot_005_z007p050",
+       "snapshot_006_z005p971",
+       "snapshot_007_z005p487",
+       "snapshot_008_z005p037",
+       "snapshot_009_z004p485",
+       "snapshot_010_z003p984",
+       "snapshot_011_z003p528",
+       "snapshot_012_z003p017",
+       "snapshot_013_z002p478",
+       "snapshot_014_z002p237",
+       "snapshot_015_z002p012",
+       "snapshot_016_z001p737",
+       "snapshot_017_z001p487",
+       "snapshot_018_z001p259",
+       "snapshot_019_z001p004",
+       "snapshot_020_z000p865",
+       "snapshot_021_z000p736",
+       "snapshot_022_z000p615",
+       "snapshot_023_z000p503",
+       "snapshot_024_z000p366",
+       "snapshot_025_z000p271",
+       "snapshot_026_z000p183",
+       "snapshot_027_z000p101",
+       "snapshot_028_z000p000",
+]
+
+# Boundaries to make the image in (in simulation units)
+bounds: [
+  [0.0, 1.0],
+  [0.0, 1.0],
+  [0.0, 1.0]
+]
+
+# What to colour the particles by
+colour_by: "GroupID"
+
+# Particle type to view
+particle_type: 0
+
+# Subsample 1/n many particles
+subsample: 100
+
+# Set the axis of the plots. Here z will be projected along
+vertical_axis: "x"
+horizontal_axis: "y"
+
+# Places a dashed line in the background at this point
+vertical_line_at: 0.5
+horizontal_line_at: 0.5
+
+# Figure handling
+figure_title: "Gas (1/100)"
+
+# Output handling
+output_filename: "Gas_z_projection_TEST.mp4"
