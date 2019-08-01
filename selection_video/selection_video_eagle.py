@@ -68,7 +68,7 @@ def load_region(filename, region, particle_type, subsample, property="Coordinate
 
     snap = read_eagle.EagleSnapshot(filename)
 
-    flat_region = np.flatten(region)
+    flat_region = np.array(region).flatten()
 
     try:
         # First load the particles that we 'know' to be in the region, ignoring
@@ -82,15 +82,17 @@ def load_region(filename, region, particle_type, subsample, property="Coordinate
             if side[0] < 0.0:
                 # Must be periodic on the 'left' side, here we wrap the box
                 # around to the 'right' side
-                new_region = region
+                new_region = flat_region
                 new_region[dimension] = boxsize + new_region[dimension]
                 new_region[dimension + 1] = boxsize
             elif side[1] > boxsize:
                 # The periodic side is on the 'right' and we need to wrap back
                 # around to the 'left'
-                new_region = region
+                new_region = flat_region
                 new_region[dimension] = 0.0
                 new_region[dimension + 1] = side[1] - boxsize
+            else:
+                continue
 
             # Note that this can only, by definition above, happen once; no need to
             # worry about this happening multiple times and reading from file again
@@ -107,9 +109,11 @@ def load_region(filename, region, particle_type, subsample, property="Coordinate
 
             # We _must_ break otherwise we'll keep adding or taking off the boxsize
             # (bad idea).
+
+            read_data = np.concatenate([read_data, data_new])
+
             break
 
-        read_data = np.concatenate([read_data, data_new])
 
     except KeyError:
         read_data = None
@@ -158,9 +162,9 @@ def read_data(params: dict):
 
         colour_data = p_map(baked_reader, filenames)
     except KeyError:
-        colour_data = [None] * len(coordinate_data)
+        colour_data = [np.ones(len(x)) for x in coordinates]
 
-    return coordinates.T, redshifts, colour_data
+    return [c.T for c in coordinates], redshifts, colour_data
 
 
 def make_video(params: dict) -> None:
@@ -170,29 +174,41 @@ def make_video(params: dict) -> None:
     """
 
     coordinates, redshifts, colours = read_data(params)
+    region = params["bounds"]
 
     convert_direction = {"x": 0, "y": 1, "z": 2}
     horizontal = convert_direction[params["horizontal_axis"]]
     vertical = convert_direction[params["vertical_axis"]]
 
     fig, ax = plt.subplots(figsize=(4, 4))
-    scatter, = ax.plot(
-        coordinates[0][horizontal],
-        coordinates[0][vertical],
+    scatter_in, = ax.plot(
+        coordinates[0][horizontal][colours[0] != 0],
+        coordinates[0][vertical][colours[0] != 0],
         linestyle="none",
         ms=0.5,
         marker="o",
         markeredgecolor="none",
+        color="C1",
+    )
+
+    scatter_out, = ax.plot(
+        coordinates[0][horizontal][colours[0] == 0],
+        coordinates[0][vertical][colours[0] == 0],
+        linestyle="none",
+        ms=0.5,
+        marker="o",
+        markeredgecolor="none",
+        color="C2",
     )
 
     try:
-        ax.axvline(params["vertical_line_at"], color="grey", ls="dashed", zorder=-1000)
+        ax.axvline(params["vertical_line_at"], color="grey", ls="dashed", zorder=-1000, lw=1.0)
     except KeyError:
         pass
 
     try:
         ax.axhline(
-            params["horizontal_line_at"], color="grey", ls="dashed", zorder=-1000
+            params["horizontal_line_at"], color="grey", ls="dashed", zorder=-1000, lw=1.0
         )
     except KeyError:
         pass
@@ -207,7 +223,7 @@ def make_video(params: dict) -> None:
     text = ax.text(
         0.95,
         0.95,
-        f"$z={data[0][2]:2.2f}$",
+        f"$z={0.0:2.2f}$",
         va="top",
         ha="right",
         transform=ax.transAxes,
@@ -218,17 +234,26 @@ def make_video(params: dict) -> None:
     def animate(snapshot):
         redshift = redshifts[snapshot]
 
-        try:
-            x_data = coordinates[snapshot][horizontal]
-            y_data = coordinates[snapshot][vertical]
-            scatter.set_xdata(x_data)
-            scatter.set_ydata(y_data)
-        except:
-            pass
+        x_data = coordinates[snapshot][horizontal]
+        y_data = coordinates[snapshot][vertical]
+        colour_data = colours[snapshot]
+
+        scatter_in.set_xdata(
+                x_data[colour_data != 0]
+        )
+        scatter_in.set_ydata(
+                y_data[colour_data != 0]
+        )
+        scatter_out.set_xdata(
+                x_data[colour_data == 0]
+        )
+        scatter_out.set_ydata(
+                y_data[colour_data == 0]
+        )
 
         text.set_text(f"$z={redshift:2.2f}$")
 
-        return (scatter,)
+        return (scatter_in, scatter_out)
 
     animation = FuncAnimation(
         # Your Matplotlib Figure object
@@ -236,7 +261,7 @@ def make_video(params: dict) -> None:
         # The function that does the updating of the Figure
         animate,
         # Frame information (here just frame number)
-        np.arange(len(snapshots)),
+        np.arange(len(redshifts)),
         # Extra arguments to the animate function
         fargs=[],
         # Frame-time in ms; i.e. for a given frame-rate x, 1000/x
