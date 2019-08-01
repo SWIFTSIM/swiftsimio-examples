@@ -7,7 +7,8 @@ import sys
 import h5py
 
 from swiftsimio import load
-from swiftsimio.visualisation import scatter, kernel_gamma
+from swiftsimio.visualisation import scatter
+from swiftsimio.visualisation.projection import kernel_gamma
 
 from matplotlib.pyplot import imsave
 from matplotlib.colors import LogNorm
