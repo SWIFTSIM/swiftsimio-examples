@@ -21,8 +21,6 @@ except:
 
 simulations = {
     "anarchy-du": r"Anarchy-DU",
-    "minimal": "Density-Energy",
-    "anarchy-du-nodiff": "Anarchy-DU (No diffusion)",
 }
 
 
@@ -143,10 +141,10 @@ ax.set_ylim(1.8e-4, 1.7)
 
 
 simulation_legend = ax.legend(
-    simulation_lines, simulation_labels, markerfirst=False, loc=1
+    simulation_lines, simulation_labels, markerfirst=False, loc=1, fontsize=6
 )
 observation_legend = ax.legend(
-    observation_lines, observation_labels, markerfirst=True, loc=3
+    observation_lines, observation_labels, markerfirst=True, loc=3, fontsize=6
 )
 ax.add_artist(simulation_legend)
 
