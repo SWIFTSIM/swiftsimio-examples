@@ -85,5 +85,9 @@ def read_obs_data(path="observational_data"):
         )
     )
 
+    # Read EAGLE data
+    rho_star, a = np.genfromtxt(f"{path}/EAGLE_25_NOAGN_STELLAR_MASS.txt").T
+    output_data.append(ObservationalData(a, rho_star, None, None, "EAGLE NoAGN"))
+
     return output_data
 
