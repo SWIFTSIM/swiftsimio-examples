@@ -2,6 +2,8 @@
 Loads the stellar mass observational data.
 """
 
+import numpy as np
+
 
 class ObservationalData(object):
     """
@@ -38,10 +40,12 @@ def read_obs_data(path="observational_data"):
 
     output_data = []
 
+    h = 0.677
+
     # Moustakas et al 2013, Table 5
     obs7_z = np.array([0.1, 0.25, 0.35, 0.45])
     obs7_a = 1.0 / (obs7_z + 1.0)
-    obs7_log10_rho_star = np.array([8.35, 8.32, 8.35, 8.31]) - log10(0.7 / h)
+    obs7_log10_rho_star = np.array([8.35, 8.32, 8.35, 8.31]) - np.log10(0.7 / h)
     obs7_log10_err_rho_star = np.array([0.05, 0.09, 0.06, 0.08])
     obs7_rho_star = 10 ** obs7_log10_rho_star
     obs7_rho_star_low = 10 ** (obs7_log10_rho_star - obs7_log10_err_rho_star)

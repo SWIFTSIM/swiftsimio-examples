@@ -21,9 +21,7 @@ try:
 except:
     pass
 
-simulations = {
-    "anarchy-du": r"Anarchy-DU",
-}
+simulations = {"anarchy-du": r"Anarchy-DU"}
 
 
 def load_data(simulation):
@@ -41,22 +39,23 @@ def load_data(simulation):
             break
 
         if i > 10000:
-            raise FileNotFoundError(
-                "Could not find the snapshots in the directory"
-            )
-
+            raise FileNotFoundError("Could not find the snapshots in the directory")
 
     # Now we can actually load the data and parse it.
     stellar_densities = []
     scale_factors = []
 
     for snapshot in range(i + 1):
-        data = load(f"{filename}_{:04d}.hdf5")
+        data = load(f"{filename}_{snapshot:04d}.hdf5")
 
         try:
             stellar_mass = data.stars.masses
             total_stellar_mass = stellar_mass.sum()
-            volume = data.metadata.boxsize[0] * data.metadata.boxsize[1] * data.metadata.boxsize[2]
+            volume = (
+                data.metadata.boxsize[0]
+                * data.metadata.boxsize[1]
+                * data.metadata.boxsize[2]
+            )
 
             stellar_density = (total_stellar_mass / volume).to(stellar_density_output)
 
@@ -110,7 +109,7 @@ for index, observation in enumerate(observational_data):
                 color="aquamarine",
                 zorder=-10000,
                 linewidth=1,
-                alpha=0.5
+                alpha=0.5,
             )[0]
         )
     else:
@@ -126,7 +125,7 @@ for index, observation in enumerate(observational_data):
                 elinewidth=0.5,
                 markeredgecolor="none",
                 markersize=2,
-                zorder=index # Required to have line and blob at same zodrer
+                zorder=index,  # Required to have line and blob at same zodrer
             )
         )
 
