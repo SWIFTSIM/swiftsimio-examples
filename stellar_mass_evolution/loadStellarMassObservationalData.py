@@ -55,7 +55,7 @@ def read_obs_data(path="observational_data"):
         ObservationalData(
             obs7_a,
             obs7_rho_star,
-            [obs7_rho_star_low, obs7_rho_star_high],
+            [obs7_rho_star - obs7_rho_star_low, obs7_rho_star_high - obs7_rho_star],
             None,
             "Moustakas et al 2013, Table 5",
         )
@@ -79,8 +79,8 @@ def read_obs_data(path="observational_data"):
         ObservationalData(
             obs8_a,
             obs8_rho_star,
-            [obs8_rho_star_low, obs8_rho_star_high],
-            [obs8_a_low, obs8_a_high],
+            [obs8_rho_star - obs8_rho_star_low, obs8_rho_star_high - obs8_rho_star],
+            [obs8_a - obs8_a_low, obs8_a_high - obs8_a],
             "Muzzin et al 2013, Table 2",
         )
     )

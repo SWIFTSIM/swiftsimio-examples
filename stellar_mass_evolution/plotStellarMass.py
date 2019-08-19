@@ -85,12 +85,12 @@ simulation_lines = []
 simulation_labels = []
 
 for simulation in simulation_data.keys():
-    scale_factor, redshift, sfr = simulation_data[simulation]
+    stellar_densities, scale_factors = simulation_data[simulation]
     name = simulations[simulation]
 
     # High z-order as we always want these to be on top of the observations
     simulation_lines.append(
-        ax.plot(scale_factor, sfr.value, label=name, zorder=10000)[0]
+        ax.plot(scale_factors, stellar_densities, label=name, zorder=10000)[0]
     )
     simulation_labels.append(name)
 
