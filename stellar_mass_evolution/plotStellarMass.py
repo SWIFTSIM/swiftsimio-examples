@@ -45,7 +45,7 @@ def load_data(simulation):
     stellar_densities = []
     scale_factors = []
 
-    for snapshot in range(i + 1):
+    for snapshot in range(i):
         data = load(f"{filename}_{snapshot:04d}.hdf5")
 
         try:
