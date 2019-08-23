@@ -33,7 +33,7 @@ def create_t_map(number):
 
     # We need to construct sum(T_j W_ij) / sum(W_ij)
     norm_grid = project_gas_pixel_grid(this_data, resolution, None)
-    temp_grid = project_gas_pixel_grid(this_data, resolution, "temperature")
+    temp_grid = project_gas_pixel_grid(this_data, resolution, "temperatures")
 
     return temp_grid / norm_grid
 

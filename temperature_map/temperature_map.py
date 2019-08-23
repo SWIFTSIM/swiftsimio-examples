@@ -23,7 +23,7 @@ data = load(snapshot)
 
 # We need to construct sum(T_j W_ij) / sum(W_ij)
 norm_grid = project_gas_pixel_grid(data, resolution, None)
-temp_grid = project_gas_pixel_grid(data, resolution, "temperature")
+temp_grid = project_gas_pixel_grid(data, resolution, "temperatures")
 
 # Imsave does not take a norm
 normalized_grid = LogNorm(vmin=1e2, vmax=1e8)(temp_grid / norm_grid)
