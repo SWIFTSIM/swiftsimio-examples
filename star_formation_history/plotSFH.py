@@ -19,9 +19,7 @@ try:
 except:
     pass
 
-simulations = {
-    "anarchy-du": r"Anarchy-DU",
-}
+simulations = {"anarchy-du": r"Anarchy-DU"}
 
 
 def load_data(simulation):
@@ -80,7 +78,7 @@ for index, observation in enumerate(observational_data):
                     color="aquamarine",
                     zorder=-10000,
                     linewidth=1,
-                    alpha=0.5
+                    alpha=0.5,
                 )[0]
             )
         else:
@@ -106,7 +104,7 @@ for index, observation in enumerate(observational_data):
                 elinewidth=0.5,
                 markeredgecolor="none",
                 markersize=2,
-                zorder=index # Required to have line and blob at same zodrer
+                zorder=index,  # Required to have line and blob at same zodrer
             )
         )
     observation_labels.append(observation.description)

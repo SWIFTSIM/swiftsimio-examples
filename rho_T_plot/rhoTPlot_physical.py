@@ -14,7 +14,7 @@ from matplotlib.animation import FuncAnimation
 
 # Constants; these could be put in the parameter file but are rarely changed.
 density_bounds = [1e-9, 1e1]  # in nh/cm^3
-temperature_bounds = [10**(3), 10**(8)]  # in K
+temperature_bounds = [10 ** (3), 10 ** (8)]  # in K
 bins = 128
 
 # Plotting controls
@@ -31,7 +31,7 @@ def get_data(filename):
     data.gas.density.convert_to_units(mh / (cm ** 3))
     data.gas.temperature.convert_to_cgs()
 
-    return data.gas.density / (data.metadata.scale_factor**3), data.gas.temperature
+    return data.gas.density / (data.metadata.scale_factor ** 3), data.gas.temperature
 
 
 def make_hist(filename, density_bounds, temperature_bounds, bins):
@@ -156,10 +156,8 @@ def get_animator(args, density_bounds, temperature_bounds, bins):
     def format_metadata(metadata: SWIFTMetadata):
         t = metadata.t
         t.convert_to_units(Gyr)
-        
-        x = "$a$: {:2.2f}\n$z$: {:2.2f}\n$t$: {:2.2f}".format(
-            metadata.a, metadata.z, t
-        )
+
+        x = "$a$: {:2.2f}\n$z$: {:2.2f}\n$t$: {:2.2f}".format(metadata.a, metadata.z, t)
 
         return x
 
@@ -190,7 +188,7 @@ def get_animator(args, density_bounds, temperature_bounds, bins):
     animation = FuncAnimation(
         fig, animate, range(len(histograms)), fargs=[], interval=1000 / 25
     )
-    
+
     return animation
 
 

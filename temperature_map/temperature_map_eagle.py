@@ -27,6 +27,7 @@ try:
 except IndexError:
     output_filename = "temperature_map_eagle.png"
 
+
 def load_data(filename: str, n_files: int, to_read: str):
     """
     Loads the data from snapshots made of multiple files.
@@ -47,7 +48,9 @@ with h5py.File(f"{snapshot}.0.hdf5", "r") as handle:
     boxsize = handle["Header"].attrs["BoxSize"]
 
 x, y, _ = load_data(snapshot, n_files, "PartType0/Coordinates").T / boxsize
-hsml = load_data(snapshot, n_files, "PartType0/SmoothingLength") / (kernel_gamma* boxsize)
+hsml = load_data(snapshot, n_files, "PartType0/SmoothingLength") / (
+    kernel_gamma * boxsize
+)
 temp = load_data(snapshot, n_files, "PartType0/Temperature")
 
 # We need to construct sum(T_j W_ij) / sum(W_ij)
