@@ -14,7 +14,7 @@ from matplotlib.animation import FuncAnimation
 from p_tqdm import p_map
 
 # Constants; these could be put in the parameter file but are rarely changed.
-density_bounds = [1e-7, 1e3]  # in nh/cm^3
+density_bounds = [1e-8, 1e5]  # in nh/cm^3
 temperature_bounds = [10**(3), 10**(8)]  # in K
 bins = 128
 
@@ -29,10 +29,10 @@ def get_data(filename):
 
     data = SWIFTDataset(filename)
 
-    data.gas.density.convert_to_units(mh / (cm ** 3))
-    data.gas.temperature.convert_to_cgs()
+    data.gas.densities.convert_to_units(mh / (cm ** 3))
+    data.gas.temperatures.convert_to_cgs()
 
-    return data.gas.density / (data.metadata.scale_factor**3), data.gas.temperature
+    return data.gas.densities / (data.metadata.scale_factor**3), data.gas.temperatures
 
 
 def make_hist(filename, density_bounds, temperature_bounds, bins):
