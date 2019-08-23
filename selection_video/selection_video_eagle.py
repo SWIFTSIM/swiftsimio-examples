@@ -114,7 +114,6 @@ def load_region(filename, region, particle_type, subsample, property="Coordinate
 
             break
 
-
     except KeyError:
         read_data = None
 
@@ -202,13 +201,19 @@ def make_video(params: dict) -> None:
     )
 
     try:
-        ax.axvline(params["vertical_line_at"], color="grey", ls="dashed", zorder=-1000, lw=1.0)
+        ax.axvline(
+            params["vertical_line_at"], color="grey", ls="dashed", zorder=-1000, lw=1.0
+        )
     except KeyError:
         pass
 
     try:
         ax.axhline(
-            params["horizontal_line_at"], color="grey", ls="dashed", zorder=-1000, lw=1.0
+            params["horizontal_line_at"],
+            color="grey",
+            ls="dashed",
+            zorder=-1000,
+            lw=1.0,
         )
     except KeyError:
         pass
@@ -221,12 +226,7 @@ def make_video(params: dict) -> None:
     ax.set_title(params["figure_title"])
 
     text = ax.text(
-        0.95,
-        0.95,
-        f"$z={0.0:2.2f}$",
-        va="top",
-        ha="right",
-        transform=ax.transAxes,
+        0.95, 0.95, f"$z={0.0:2.2f}$", va="top", ha="right", transform=ax.transAxes
     )
 
     fig.tight_layout()
@@ -238,18 +238,10 @@ def make_video(params: dict) -> None:
         y_data = coordinates[snapshot][vertical]
         colour_data = colours[snapshot]
 
-        scatter_in.set_xdata(
-                x_data[colour_data != 0]
-        )
-        scatter_in.set_ydata(
-                y_data[colour_data != 0]
-        )
-        scatter_out.set_xdata(
-                x_data[colour_data == 0]
-        )
-        scatter_out.set_ydata(
-                y_data[colour_data == 0]
-        )
+        scatter_in.set_xdata(x_data[colour_data != 0])
+        scatter_in.set_ydata(y_data[colour_data != 0])
+        scatter_out.set_xdata(x_data[colour_data == 0])
+        scatter_out.set_ydata(y_data[colour_data == 0])
 
         text.set_text(f"$z={redshift:2.2f}$")
 

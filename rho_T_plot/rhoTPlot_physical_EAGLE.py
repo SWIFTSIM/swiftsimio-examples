@@ -2,7 +2,7 @@
 Makes a rho-T plot. Uses the swiftsimio library.
 """
 import matplotlib.pyplot as plt
-import numpy as np 
+import numpy as np
 
 import h5py
 
@@ -12,8 +12,8 @@ from matplotlib.colors import LogNorm
 from matplotlib.animation import FuncAnimation
 
 # Constants; these could be put in the parameter file but are rarely changed.
-density_bounds = [1e-7, 1e3]  # in nh/cm^3
-temperature_bounds = [10**(3), 10**(8)]  # in K
+density_bounds = [1e-8, 1e5]  # in nh/cm^3
+temperature_bounds = [10 ** (3), 10 ** (8)]  # in K
 bins = 128
 VMIN, VMAX = [1e0, 7.5e5]
 
@@ -52,16 +52,17 @@ def get_data(filename, n_files):
         h = handle["Header"].attrs["HubbleParam"]
         unit_density = handle["Units"].attrs["UnitDensity_in_cgs"]
 
-    mh = 1.6737236e-24
+    mh = 1.673_723_6e-24
     unit_density /= mh
 
     print(len(density))
 
     density *= unit_density
-    density *= h**2
-    density /= scale_factor**3
+    density *= h ** 2
+    density /= scale_factor ** 3
 
     return density, temperature
+
 
 def make_hist(filename, n_files, density_bounds, temperature_bounds, bins):
     """
@@ -107,9 +108,7 @@ def make_single_image(filename, n_files, density_bounds, temperature_bounds, bin
     """
 
     fig, ax = setup_axes()
-    hist, d, T = make_hist(
-        filename, n_files, density_bounds, temperature_bounds, bins
-    )
+    hist, d, T = make_hist(filename, n_files, density_bounds, temperature_bounds, bins)
 
     mappable = ax.pcolormesh(d, T, hist, cmap=cmap, norm=LogNorm(vmin=VMIN, vmax=VMAX))
     fig.colorbar(mappable, label="Number of particles", pad=0)
@@ -144,11 +143,11 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-         "-n",
-         "--nfiles",
-         help="""Number of EAGLE files to read""",
-         type=int,
-         required=True,
+        "-n",
+        "--nfiles",
+        help="""Number of EAGLE files to read""",
+        type=int,
+        required=True,
     )
 
     # Run in single image mode.

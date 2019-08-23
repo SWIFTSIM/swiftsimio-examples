@@ -28,32 +28,30 @@ snaps = list(range(snapshot_start, snapshot_end + 1))
 
 data = [load(f"{snapshot_name}_{snapshot:04d}.hdf5") for snapshot in snaps]
 
+
 def create_t_map(number):
     this_data = data[number]
 
     # We need to construct sum(T_j W_ij) / sum(W_ij)
     norm_grid = project_gas_pixel_grid(this_data, resolution, None)
-    temp_grid = project_gas_pixel_grid(this_data, resolution, "temperature")
+    temp_grid = project_gas_pixel_grid(this_data, resolution, "temperatures")
 
     return temp_grid / norm_grid
 
 
 maps = p_map(create_t_map, snaps)
 
-fig, ax = plt.subplots(figsize=(1,1), dpi=resolution)
+fig, ax = plt.subplots(figsize=(1, 1), dpi=resolution)
 fig.subplots_adjust(0, 0, 1, 1)
 ax.axis("off")
 
-image = ax.imshow(
-    maps[0],
-    norm=LogNorm(vmin=1e2, vmax=1e8),
-    cmap="twilight"
-)
+image = ax.imshow(maps[0], norm=LogNorm(vmin=1e2, vmax=1e8), cmap="twilight")
+
 
 def animate(number):
     image.set_array(maps[number])
 
-    return image,
+    return (image,)
 
 
 animation = FuncAnimation(fig, animate, snaps, interval=50)
