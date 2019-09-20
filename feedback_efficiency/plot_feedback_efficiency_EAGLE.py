@@ -1,39 +1,50 @@
 """
-Plots the feedback efficiency for a given snapshot.
+Plots the feedback efficiency for a given snapshot, now using EAGLE.
 """
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from swiftsimio import load
+import read_eagle
 
 try:
     plt.style.use("mnras_durham")
 except:
     pass
 
+# Point me towards ...../snapshot_x_z_x.0.hdf5
 simulations = {"/path/to/sim": "Simulation Name"}
 
-snapshot = "eagle_0005.hdf5"
 
-data = {k: load(f"{k}/{snapshot}") for k in simulations.keys()}
+def load(snapshot_path):
+    """
+    Loads the data required.
+    """
+
+    snap = read_eagle.EagleSnapshot(snapshot_path)
+
+    # Read whole volume...
+    snap.select_region(0, 100, 0, 100, 0, 100)
+
+    eff = snap.read_dataset(4, "Feedback_EnergyFraction")
+    z = snap.redshift
+
+    return z, eff
+
+
+data = {k: load(k) for k in simulations.keys()}
 
 # Let's get the feedback efficiency max/min for the first
 # one to get the bins we want to use.
 first_data = data[list(simulations.keys())[0]]
 
-feedback_min = float(
-    first_data.metadata.parameters["EAGLEFeedback:SNII_energy_fraction_min"]
-)
-feedback_max = float(
-    first_data.metadata.parameters["EAGLEFeedback:SNII_energy_fraction_max"]
-)
-feedback_bins = np.linspace(feedback_min, feedback_max, 50)
+feedback_min = 0.3
+feedback_bins = 3.0
 feedback_bin_centers = [
     0.5 * (x + y) for x, y in zip(feedback_bins[1:], feedback_bins[:-1])
 ]
 
-current_redshift = first_data.metadata.redshift
+current_redshift = first_data[0]
 
 # Can begin the plotting now
 
@@ -47,10 +58,8 @@ simulation_lines = []
 simulation_labels = []
 
 for simulation in data.keys():
-    this_data = data[simulation]
-    these_feedback_fractions, _ = np.histogram(
-        this_data.stars.feedback_energy_fractions, bins=feedback_bins
-    )
+    this_data = data[simulation][1]
+    these_feedback_fractions, _ = np.histogram(this_data, bins=feedback_bins)
     name = simulations[simulation]
 
     # High z-order as we always want these to be on top of the observations
