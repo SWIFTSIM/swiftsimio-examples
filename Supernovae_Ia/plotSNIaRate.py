@@ -114,7 +114,7 @@ ax.set_xlabel("Redshift $z$")
 ax.set_ylabel(r"SNIa rate $[\rm yr^{-1} \cdot Mpc^{-3}]$")
 
 
-redshift_ticks = np.array([0.0, 0.2, 0.5, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0, 50.0, 100.0])
+redshift_ticks = np.array([0.0, 0.2, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0, 10.0, 20.0, 50.0, 100.0])
 redshift_labels = [
     "$0$",
     "$0.2$",
@@ -123,6 +123,7 @@ redshift_labels = [
     "$2$",
     "$3$",
     "$5$",
+    "$7$",
     "$10$",
     "$20$",
     "$50$",
@@ -134,7 +135,7 @@ ax.set_xticks(a_ticks)
 ax.set_xticklabels(redshift_labels)
 ax.tick_params(axis="x", which="minor", bottom=False)
 
-ax.set_xlim(1.02, 0.07)
+ax.set_xlim(1.02, 0.10)
 ax.set_ylim(1e-5,2e-4)
 
 
