@@ -29,14 +29,14 @@ def load_data(simulation):
     filename = f"{simulation}/SNIa.txt"
 
     data = np.genfromtxt(filename).T
-    
+
     default_SNIa_rate_conversion = 1.022690e-12
 
-    a = (data[4] + data[5])/2.
-    z = (data[6] + data[7])/2.
+    a = (data[4] + data[5]) / 2.0
+    z = (data[6] + data[7]) / 2.0
 
     # a, Redshift, SFR
-    return a, z, data[11] * default_SNIa_rate_conversion 
+    return a, z, data[11] * default_SNIa_rate_conversion
 
 
 simulation_data = {k: load_data(k) for k in simulations.keys()}
@@ -137,7 +137,6 @@ ax.tick_params(axis="x", which="minor", bottom=False)
 
 ax.set_xlim(1.02, 0.10)
 ax.set_ylim(1e-5,2e-4)
-
 
 simulation_legend = ax.legend(
     simulation_lines, simulation_labels, markerfirst=False, loc=1, fontsize=6
