@@ -22,7 +22,7 @@ try:
 except:
     pass
 
-simulations = {"/cosma6/data/dp004/dc-nobe1/swift-colibre/examples/EAGLE_ICs/EAGLE_25_NOAGN_exp_loweff": r"Anarchy-DU"}
+simulations = {"anarchy-du": r"Anarchy-DU"}
 
 
 def load_data(simulation):
