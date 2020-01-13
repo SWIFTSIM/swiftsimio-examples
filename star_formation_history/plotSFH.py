@@ -1,6 +1,9 @@
 """
 Plots the star formation history.
 """
+import matplotlib
+
+matplotlib.use("Agg")
 
 import unyt
 
@@ -19,7 +22,7 @@ try:
 except:
     pass
 
-simulations = {"anarchy-du": r"Anarchy-DU"}
+simulations = {"/cosma6/data/dp004/dc-nobe1/swift-colibre/examples/EAGLE_ICs/EAGLE_25_NOAGN_exp_loweff": r"Anarchy-DU"}
 
 
 def load_data(simulation):
@@ -142,7 +145,7 @@ simulation_legend = ax.legend(
     simulation_lines, simulation_labels, markerfirst=False, loc=1, fontsize=6
 )
 observation_legend = ax.legend(
-    observation_lines, observation_labels, markerfirst=True, loc=3, fontsize=6
+    observation_lines, observation_labels, markerfirst=True, loc=3, fontsize=6, ncol=2
 )
 ax.add_artist(simulation_legend)
 
