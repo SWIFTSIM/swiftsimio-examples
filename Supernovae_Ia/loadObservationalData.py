@@ -1,5 +1,5 @@
 """
-Code from Matthieu Schaller to load observational SFR data.
+Code from Folkert Nobels to load observational SNIa rate data.
 """
 
 from numpy import *

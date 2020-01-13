@@ -102,7 +102,7 @@ def read_obs_data(path="observational_data"):
         )
     )
 
-    # sfr observational data from cucciati 2012
+    # SFR Observational data from Cucciati 2012
     z, rhostar, err_m, err_p = loadtxt(f"{path}/sfr_cucciati2011.dat", unpack=True)
     rhostar = rhostar - 2.0 * log10(0.7) + 2.0 * log10(0.6777)
     obs5_a = 1.0 / (1 + z)
