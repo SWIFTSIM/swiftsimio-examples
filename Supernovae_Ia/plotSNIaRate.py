@@ -26,20 +26,17 @@ simulations = {"anarchy-du": r"Anarchy-DU"}
 
 
 def load_data(simulation):
-    filename = f"{simulation}/SFR.txt"
-    snapshot = f"{simulation}/eagle_0000.hdf5"
+    filename = f"{simulation}/SNIa.txt"
 
     data = np.genfromtxt(filename).T
 
-    initial_snapshot = load(snapshot)
-    units = initial_snapshot.units
-    boxsize = initial_snapshot.metadata.boxsize
-    box_volume = boxsize[0] * boxsize[1] * boxsize[2]
+    default_SNIa_rate_conversion = 1.022690e-12
 
-    sfr_units = initial_snapshot.gas.star_formation_rates.units
+    a = (data[4] + data[5]) / 2.0
+    z = (data[6] + data[7]) / 2.0
 
     # a, Redshift, SFR
-    return data[2], data[3], (data[7] * sfr_units / box_volume).to(sfr_output_units)
+    return a, z, data[11] * default_SNIa_rate_conversion
 
 
 simulation_data = {k: load_data(k) for k in simulations.keys()}
@@ -56,12 +53,12 @@ simulation_lines = []
 simulation_labels = []
 
 for simulation in simulation_data.keys():
-    scale_factor, redshift, sfr = simulation_data[simulation]
+    scale_factor, redshift, SNIa_rate = simulation_data[simulation]
     name = simulations[simulation]
 
     # High z-order as we always want these to be on top of the observations
     simulation_lines.append(
-        ax.plot(scale_factor, sfr.value, label=name, zorder=10000)[0]
+        ax.plot(scale_factor, SNIa_rate, label=name, zorder=10000)[0]
     )
     simulation_labels.append(name)
 
@@ -76,7 +73,7 @@ for index, observation in enumerate(observational_data):
             observation_lines.append(
                 ax.plot(
                     observation.scale_factor,
-                    observation.sfr,
+                    observation.SNIa_rate,
                     label=observation.description,
                     color="aquamarine",
                     zorder=-10000,
@@ -88,7 +85,7 @@ for index, observation in enumerate(observational_data):
             observation_lines.append(
                 ax.plot(
                     observation.scale_factor,
-                    observation.sfr,
+                    observation.SNIa_rate,
                     label=observation.description,
                     color="grey",
                     linewidth=1,
@@ -99,7 +96,7 @@ for index, observation in enumerate(observational_data):
         observation_lines.append(
             ax.errorbar(
                 observation.scale_factor,
-                observation.sfr,
+                observation.SNIa_rate,
                 observation.error,
                 label=observation.description,
                 linestyle="none",
@@ -114,10 +111,10 @@ for index, observation in enumerate(observational_data):
 
 
 ax.set_xlabel("Redshift $z$")
-ax.set_ylabel(r"SFR Density $\dot{\rho}_*$ [M$_\odot$ yr$^{-1}$ Mpc$^{-3}$]")
+ax.set_ylabel(r"SNIa rate $[\rm yr^{-1} \cdot Mpc^{-3}]$")
 
 
-redshift_ticks = np.array([0.0, 0.2, 0.5, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0, 50.0, 100.0])
+redshift_ticks = np.array([0.0, 0.2, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0, 10.0, 20.0, 50.0, 100.0])
 redshift_labels = [
     "$0$",
     "$0.2$",
@@ -126,6 +123,7 @@ redshift_labels = [
     "$2$",
     "$3$",
     "$5$",
+    "$7$",
     "$10$",
     "$20$",
     "$50$",
@@ -137,9 +135,8 @@ ax.set_xticks(a_ticks)
 ax.set_xticklabels(redshift_labels)
 ax.tick_params(axis="x", which="minor", bottom=False)
 
-ax.set_xlim(1.02, 0.07)
-ax.set_ylim(1.8e-4, 1.7)
-
+ax.set_xlim(1.02, 0.10)
+ax.set_ylim(1e-5,2e-4)
 
 simulation_legend = ax.legend(
     simulation_lines, simulation_labels, markerfirst=False, loc=1, fontsize=6
@@ -151,4 +148,4 @@ ax.add_artist(simulation_legend)
 
 fig.tight_layout()
 
-fig.savefig("SFH_Comparison.pdf")
+fig.savefig("SNIa_rate_Comparison.pdf")
